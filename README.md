@@ -9,4 +9,4 @@ Hosting express node project on vercel
 
 ## Deployed on
 
-> <https://node-express-vercel-oicnnycka-kzaman.vercel.app>
+> <https://express-vercel-kzaman.vercel.app>
