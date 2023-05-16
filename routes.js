@@ -5,7 +5,8 @@ const User = require('./models/user');
 router.get('/', async (req, res, next) => {
 	return res.status(200).json({
 		title: 'Express Testing',
-		message: 'The app is working properly!'
+		message: 'The app is working properly!',
+		users: 'https://express-vercel-kzaman.vercel.app/users'
 	});
 });
 router.get('/users', async (req, res) => {
