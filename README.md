@@ -1,8 +1,12 @@
 # node-express-vercel
+
 Hosting express node project on vercel
 
-### Video
-> https://youtu.be/vCuf62T2snY
+## Features
 
-### Deployed on
-> https://node-express-vercel-rose.vercel.app/home
+    * User List
+    * User Details
+
+## Deployed on
+
+> <https://node-express-vercel-oicnnycka-kzaman.vercel.app>
