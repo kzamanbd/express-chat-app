@@ -1,13 +1,23 @@
 // Import packages
-const express = require("express");
-const home = require("./routes/home");
+const express = require('express');
+const home = require('./routes/home');
 
-// Middlewares
+// mongoose connection
+const mongoose = require('mongoose');
+try {
+	mongoose.connect('mongodb+srv://kzaman:12345678@cluster0.t00ijp0.mongodb.net/').then(() => {
+		console.log('Connected to MongoDB...');
+	});
+} catch (error) {
+	console.log(error);
+}
+
+// Middleware
 const app = express();
 app.use(express.json());
 
 // Routes
-app.use("/home", home);
+app.use('/', home);
 
 // connection
 const port = process.env.PORT || 9001;
