@@ -1,11 +1,11 @@
 // Import packages
 const express = require('express');
-const home = require('./routes/home');
+const home = require('./routes');
 
 // mongoose connection
 const mongoose = require('mongoose');
 try {
-	mongoose.connect('mongodb+srv://kzaman:12345678@cluster0.t00ijp0.mongodb.net/').then(() => {
+	mongoose.connect('mongodb+srv://kzaman:16724245@cluster0.t00ijp0.mongodb.net/').then(() => {
 		console.log('Connected to MongoDB...');
 	});
 } catch (error) {
@@ -21,4 +21,4 @@ app.use('/', home);
 
 // connection
 const port = process.env.PORT || 9001;
-app.listen(port, () => console.log(`Listening to port ${port}`));
+app.listen(port, () => console.log(`Listening to port http://localhost:${port}`));
