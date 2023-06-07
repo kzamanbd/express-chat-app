@@ -30,7 +30,7 @@ router.get('/users', async (req, res) => {
         });
     }
 });
-router.use('/auth', authRoutes);
-router.use('/chat', chatRoutes);
+router.use('/api/auth', authRoutes);
+router.use('/api/chat', chatRoutes);
 
 module.exports = router;
