@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
         users: 'https://express-vercel-kzaman.vercel.app/users'
     });
 });
-router.get('/users', async (req, res) => {
+router.get('/api/users', async (req, res) => {
     try {
         const docs = await User.find({}).limit(100).exec();
 
@@ -31,7 +31,7 @@ router.get('/users', async (req, res) => {
         });
     }
 });
-router.use('/', baseRoutes);
+router.use('/api', baseRoutes);
 router.use('/api/auth', authRoutes);
 router.use('/api/chat', chatRoutes);
 

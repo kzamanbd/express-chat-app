@@ -1,5 +1,5 @@
+const { v4: uuidV4 } = require('uuid');
 const { GeneralError } = require('../utilities/errors');
-
 // module scaffolding
 const handler = {};
 
@@ -7,7 +7,7 @@ const handler = {};
 handler.requestHandler = (req, res, next) => {
     let correlationId = req.headers['x-correlation-id'];
     if (!correlationId) {
-        correlationId = Date.now().toString();
+        correlationId = uuidV4();
         req.headers['x-correlation-id'] = correlationId;
     }
 
