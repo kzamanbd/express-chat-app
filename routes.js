@@ -5,6 +5,7 @@ const User = require('./models/user');
 
 const authRoutes = require('./controllers/auth.controller');
 const chatRoutes = require('./controllers/chat.controller');
+const baseRoutes = require('./controllers/base.controller');
 
 router.get('/', async (req, res) => {
     res.status(200).json({
@@ -30,6 +31,7 @@ router.get('/users', async (req, res) => {
         });
     }
 });
+router.use('/', baseRoutes);
 router.use('/api/auth', authRoutes);
 router.use('/api/chat', chatRoutes);
 
