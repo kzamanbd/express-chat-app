@@ -6,6 +6,7 @@ const handler = {};
 const rooms = {};
 
 handler.socketConnection = (socket) => {
+    console.log('Client connected', socket.id);
     // create room
     const roomCreate = (userId) => {
         const roomId = uuidV4();
