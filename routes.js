@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     res.status(200).json({
         title: 'Express Testing',
         message: 'The app is working properly!',
-        users: 'https://express-vercel-kzaman.vercel.app/users'
+        users: `${req.protocol}://${req.get('host')}${req.originalUrl}users`
     });
 });
 router.get('/api/users', async (req, res) => {
