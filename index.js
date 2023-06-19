@@ -40,8 +40,6 @@ const io = socketIo(server, {
     }
 });
 
-global.io = io;
-
 // set cors
 app.use(cors({ credentials: true, origin: true }));
 app.set('trust proxy');
@@ -50,6 +48,7 @@ app.set('trust proxy');
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 const chat = io.of('/chat');
+global.chat = chat;
 chat.on('connection', socketConnection);
 
 // Routes

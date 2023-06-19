@@ -78,7 +78,7 @@ const createConversation = async (req, res) => {
                         ? populatedData.fromUser._id
                         : populatedData.toUser._id;
 
-                global.io.emit(`conversation.${targetUser}`, populatedData);
+                global.chat.emit(`conversation.${targetUser}`, populatedData);
 
                 res.status(201).json({
                     success: true,
@@ -133,9 +133,9 @@ const sendMessage = async (req, res) => {
                     ? conversation.fromUser._id
                     : conversation.toUser._id;
 
-            global.io.emit(`conversation.${targetUser}`, conversation);
+            global.chat.emit(`conversation.${targetUser}`, conversation);
 
-            global.io.emit(`newMessage.${conversationId}`, {
+            global.chat.emit(`newMessage.${conversationId}`, {
                 ...newMessage._doc,
                 targetUser,
                 userInfo: {
