@@ -89,7 +89,7 @@ const createConversation = async (req, res) => {
                     partnerInfo: targetUser
                 };
 
-                global.chat.emit(`conversation.${targetUser._id}`, populatedData);
+                global.chat.emit(`conversation.${targetUser._id}`, conversation);
 
                 res.status(201).json({
                     success: true,
@@ -139,12 +139,12 @@ const sendMessage = async (req, res) => {
             conversation.lastMessage = message;
             await conversation.save();
 
-            const targetUser =
-                conversation.toUser._id.toString() === req.authUser._id.toString()
-                    ? conversation.fromUser._id
-                    : conversation.toUser._id;
+            const targetUser = getPartnerInfo(conversation, req.authUser._id);
 
-            global.chat.emit(`conversation.${targetUser}`, conversation);
+            global.chat.emit(`conversation.${targetUser._id}`, {
+                ...conversation._doc,
+                partnerInfo: targetUser
+            });
 
             global.chat.emit(`newMessage.${conversationId}`, {
                 ...newMessage._doc,
