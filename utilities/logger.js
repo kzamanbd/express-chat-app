@@ -34,8 +34,8 @@ const mongoErrorTransport = new transports.MongoDB({
 // eslint-disable-next-line no-unused-vars
 const getLogMessage = (req, res) => {
     const msgObj = {
-        correlationId: req.headers['x-correlation-id'],
-        requestBody: req.body
+        request: req.body,
+        correlationId: req.headers['x-correlation-id']
     };
 
     return JSON.stringify(msgObj);
