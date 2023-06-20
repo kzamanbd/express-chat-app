@@ -173,9 +173,16 @@ const getConversations = async (req, res) => {
             .populate('fromUser', 'name avatar')
             .sort('-updatedAt')
             .exec();
+
+        const conversations = docs.map((conversation) => ({
+            ...conversation._doc,
+            partnerInfo:
+                conversation.toUser._id.toString() === userId.toString() ? conversation.fromUser : conversation.toUser
+        }));
+
         res.status(200).json({
             success: true,
-            conversations: docs
+            conversations
         });
     } catch (error) {
         res.status(500).json({
