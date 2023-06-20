@@ -5,6 +5,12 @@ const { cookieAuth: auth } = require('../middleware/authenticate');
 
 const router = express.Router();
 
+const getPartnerInfo = (conversation, userId) => {
+    const partner =
+        conversation.toUser._id.toString() === userId.toString() ? conversation.fromUser : conversation.toUser;
+    return partner;
+};
+
 // find existing conversation
 const findConversation = async (req, res) => {
     const { userId } = req.params;
@@ -18,7 +24,10 @@ const findConversation = async (req, res) => {
         if (conversation) {
             res.status(200).json({
                 success: true,
-                conversation
+                conversation: {
+                    ...conversation._doc,
+                    partnerInfo: getPartnerInfo(conversation, req.authUser._id)
+                }
             });
         } else {
             res.status(404).json({
@@ -73,16 +82,18 @@ const createConversation = async (req, res) => {
                     .exec();
 
                 // target conversation to user
-                const targetUser =
-                    populatedData.toUser._id.toString() === req.authUser._id.toString()
-                        ? populatedData.fromUser._id
-                        : populatedData.toUser._id;
+                const targetUser = getPartnerInfo(populatedData, req.authUser._id);
 
-                global.chat.emit(`conversation.${targetUser}`, populatedData);
+                const conversation = {
+                    ...populatedData._doc,
+                    partnerInfo: targetUser
+                };
+
+                global.chat.emit(`conversation.${targetUser._id}`, populatedData);
 
                 res.status(201).json({
                     success: true,
-                    conversation: populatedData
+                    conversation
                 });
             } else {
                 res.status(400).json({
@@ -176,8 +187,7 @@ const getConversations = async (req, res) => {
 
         const conversations = docs.map((conversation) => ({
             ...conversation._doc,
-            partnerInfo:
-                conversation.toUser._id.toString() === userId.toString() ? conversation.fromUser : conversation.toUser
+            partnerInfo: getPartnerInfo(conversation, req.authUser._id)
         }));
 
         res.status(200).json({
@@ -204,12 +214,7 @@ const getMessages = async (req, res) => {
             .populate('fromUser', 'name avatar')
             .exec();
 
-        let chatHead = {};
-        if (conversation?.toUser?._id.toString() === req.authUser._id.toString()) {
-            chatHead = conversation?.fromUser;
-        } else {
-            chatHead = conversation?.toUser;
-        }
+        const chatHead = getPartnerInfo(conversation, req.authUser._id);
 
         // find all messages
         const messages = await Message.find({ conversationId }).populate('userInfo', 'name avatar').exec();
