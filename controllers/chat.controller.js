@@ -128,7 +128,7 @@ const sendMessage = async (req, res) => {
         if (conversation) {
             // save message
             const newMessage = new Message({
-                userInfo: req.authUser._id,
+                userInfo: req.authUser,
                 conversationId: conversation._id,
                 message
             });
