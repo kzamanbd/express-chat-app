@@ -233,10 +233,10 @@ const getMessages = async (req, res) => {
     }
 };
 
-router.get('/find-conversation/:userId', auth, findConversation);
-router.post('/create-conversation', auth, createConversation);
-router.post('/send-message', auth, sendMessage);
-router.get('/get-conversations/:userId', auth, getConversations);
-router.get('/get-messages/:conversationId', auth, getMessages);
+router.get('/conversation/:userId', auth, findConversation);
+router.get('/conversations/:userId', auth, getConversations);
+router.post('/conversation', auth, createConversation);
+router.get('/messages/:conversationId', auth, getMessages);
+router.post('/message', auth, sendMessage);
 
 module.exports = router;
