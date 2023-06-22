@@ -1,6 +1,6 @@
 // import dependencies
 const express = require('express');
-const { Conversation, Message } = require('../models');
+const { Conversation, Message, User } = require('../models');
 const { cookieAuth: auth } = require('../middleware/authenticate');
 
 const router = express.Router();
@@ -224,7 +224,37 @@ const getMessages = async (req, res) => {
             chatHead
         });
     } catch (error) {
-        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error
+        });
+    }
+};
+
+// get users to start conversation
+const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({ _id: { $ne: req.authUser._id } });
+
+        // get all conversations
+        const conversations = await Conversation.find({
+            $or: [{ toUser: req.authUser._id }, { fromUser: req.authUser._id }]
+        });
+        // filter users who have no conversation with current user
+        const filteredUsers = users.filter((user) => {
+            const found = conversations.find((item) => {
+                const { toUser, fromUser } = item;
+                return toUser.toString() === user._id.toString() || fromUser.toString() === user._id.toString();
+            });
+            return !found;
+        });
+
+        res.status(200).json({
+            success: true,
+            users: filteredUsers
+        });
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
@@ -238,5 +268,6 @@ router.get('/conversations/:userId', auth, getConversations);
 router.post('/conversation', auth, createConversation);
 router.get('/messages/:conversationId', auth, getMessages);
 router.post('/message', auth, sendMessage);
+router.get('/users', auth, getUsers);
 
 module.exports = router;
