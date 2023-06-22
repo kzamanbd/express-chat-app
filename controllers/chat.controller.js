@@ -128,7 +128,7 @@ const sendMessage = async (req, res) => {
         if (conversation) {
             // save message
             const newMessage = new Message({
-                userInfo: req.authUser,
+                userInfo: req.authUser._id,
                 conversationId: conversation._id,
                 message
             });
@@ -149,11 +149,7 @@ const sendMessage = async (req, res) => {
             global.chat.emit(`newMessage.${conversationId}`, {
                 ...newMessage._doc,
                 targetUser,
-                userInfo: {
-                    _id: req.authUser._id,
-                    name: req.authUser.name,
-                    avatar: req.authUser.avatar
-                }
+                userInfo: req.authUser
             });
 
             res.status(201).json({
