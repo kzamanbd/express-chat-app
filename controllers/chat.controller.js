@@ -241,13 +241,16 @@ const getUsers = async (req, res) => {
         const conversations = await Conversation.find({
             $or: [{ toUser: req.authUser._id }, { fromUser: req.authUser._id }]
         });
-        // filter users who have no conversation with current user
-        const filteredUsers = users.filter((user) => {
+        // filter users who have conversation with current user
+        const filteredUsers = users.map((user) => {
             const found = conversations.find((item) => {
                 const { toUser, fromUser } = item;
                 return toUser.toString() === user._id.toString() || fromUser.toString() === user._id.toString();
             });
-            return !found;
+            return {
+                ...user._doc,
+                conversationId: found ? found._id : null
+            };
         });
 
         res.status(200).json({
