@@ -154,7 +154,10 @@ const sendMessage = async (req, res) => {
 
             res.status(201).json({
                 success: true,
-                message: newMessage
+                message: {
+                    ...newMessage._doc,
+                    userInfo: req.authUser
+                }
             });
         } else {
             res.status(400).json({
