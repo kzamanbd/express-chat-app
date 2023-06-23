@@ -151,18 +151,16 @@ const sendMessage = async (req, res) => {
                 name: req.authUser.name
             };
 
-            global.chat.emit(`newMessage.${conversationId}`, {
+            const messageData = {
                 ...newMessage._doc,
-                targetUser,
                 userInfo
-            });
+            };
+
+            global.chat.emit(`newMessage.${conversationId}`, messageData);
 
             res.status(201).json({
                 success: true,
-                message: {
-                    ...newMessage._doc,
-                    userInfo
-                }
+                message: messageData
             });
         } else {
             res.status(400).json({

@@ -6,10 +6,12 @@ const http = require('http');
 const socketIo = require('socket.io');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
 const routes = require('./routes');
 const { socketConnection } = require('./controllers/socket.controller');
 const { errorHandler, requestHandler } = require('./middleware/errorHandler');
 const { errorLogger, infoLogger, logger } = require('./utilities/logger');
+const swaggerDocument = require('./swagger.json');
 
 // mongoose connection
 try {
@@ -58,6 +60,12 @@ app.use('/', routes);
 app.use(errorLogger);
 // error handler
 app.use(errorHandler);
+
+const options = {
+    customCss: '.swagger-ui .topbar { display: none }'
+};
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 // connection
 const port = process.env.PORT || 9001;
 server.listen(port, () => logger.info(`Listening to port http://localhost:${port}`));
