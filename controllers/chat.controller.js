@@ -39,7 +39,7 @@ const findConversation = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
-            error
+            error: error.message
         });
     }
 };
@@ -111,7 +111,7 @@ const createConversation = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
-            error
+            error: error.message
         });
     }
 };
@@ -165,14 +165,15 @@ const sendMessage = async (req, res) => {
         } else {
             res.status(400).json({
                 success: false,
-                message: 'Something went wrong'
+                message: 'Something went wrong',
+                error: 'Conversation not found'
             });
         }
     } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
-            error
+            error: error.message
         });
     }
 };
@@ -200,7 +201,7 @@ const getConversations = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
-            error
+            error: error.message
         });
     }
 };
@@ -229,7 +230,7 @@ const getMessages = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
-            error
+            error: error.message
         });
     }
 };
@@ -263,7 +264,7 @@ const getUsers = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
-            error
+            error: error.message
         });
     }
 };
