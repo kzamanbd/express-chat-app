@@ -12,8 +12,6 @@ handler.socketConnection = (socket) => {
         const roomId = uuidV4();
         socket.emit('room-created', { roomId, userId });
         rooms[roomId] = [];
-        const incomeCall = { roomId, userId };
-        socket.emit('incoming-call', incomeCall);
     };
 
     // join room
