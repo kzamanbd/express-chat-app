@@ -1,8 +1,19 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const express = require('express');
+const nodemailer = require('nodemailer');
 const { User } = require('../models');
 const { BadRequest } = require('../utilities/errors');
+
+// node mailer
+const transporter = nodemailer.createTransport({
+    host: 'sandbox.smtp.mailtrap.io',
+    port: 2525,
+    auth: {
+        user: '7b9fce5df6dcb0',
+        pass: '6be66697f21486'
+    }
+});
 
 const router = express.Router();
 
@@ -72,6 +83,23 @@ const register = async (req, res, next) => {
         };
         try {
             const user = await User.create(userData);
+            // send email
+            const mailOptions = {
+                from: '"Fred Foo 👻" kzamanbn@gmail.com',
+                to: email,
+                subject: 'Welcome to the app!',
+                text: 'Hello world?', // plain text body
+                html: '<b>Hello world?</b>'
+            };
+
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    console.log(`Error occurred. ${err.message}`);
+                } else {
+                    console.log(info);
+                }
+            });
+
             if (withLogin) {
                 const userObject = {
                     _id: user._id,
